@@ -144,19 +144,40 @@ public class SignUpFrame extends JFrame {
             FileWriter fileWriter = new FileWriter(path, true);
 
             // 파일에 쓸 내용 작성
-            String content = "Hello, this is a sample file content.1111\n";
-            fileWriter.write(content);
+            StringBuffer sb = new StringBuffer();
+            // StringBuffer
+            sb.append(t1.getText());
+            sb.append(",");
+            sb.append(t2.getPassword());
+            sb.append(",");
+            sb.append(t4.getText());
+            sb.append(",");
+
+            if(r1.isSelected()) {
+            	sb.append("0"); //남자
+            } else {
+            	sb.append("1");// 여자
+            	}
+            sb.append("\n");
+
+            fileWriter.write(sb.toString()); // StringBuffer 에서 받은 객체를 문자열로 만들어 줌
 
             // 파일 닫기
             fileWriter.close();
 
-            System.out.println("파일이 성공적으로 생성되었습니다.");
+			JOptionPane.showMessageDialog(null, "회원가입이 완료 되었습니다.");
+			setVisible(false);
+			new LoginFrame();
 
 		}catch (Exception e) {
 			System.out.println("파일 생성 중 오류가 발생했습니다.");
             e.printStackTrace();
 		}
 
+
 	}
+
+
+
 
 }
