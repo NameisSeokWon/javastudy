@@ -21,6 +21,7 @@ import koutsuhi.signup.SignUpFrame;
 public class LoginFrame extends JFrame {	
 	
 	public static String userId;
+	public static String userName;
 
 	JButton b1 = new JButton("로그인");
 	JButton b2 = new JButton("회원가입");
