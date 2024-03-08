@@ -18,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 
 import koutsuhi.data.DataUtil;
 import koutsuhi.login.LoginFrame;
-import koutsuhi.loginmain.LoginMainFrame;
 import koutsuhi.modify.ModifyFrame;
 
 public class ListFrame extends JFrame {
@@ -27,6 +26,7 @@ public class ListFrame extends JFrame {
     DefaultTableModel model;
     JTable table;
     JTextField t2;
+    
 
     public ListFrame() {
         setTitle("교통비정산 시스템 - 리스트");
@@ -72,7 +72,7 @@ public class ListFrame extends JFrame {
         table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
-        
+       
 
         JPanel p2 = new JPanel(new FlowLayout());
         JButton b1 = new JButton("뒤로가기");
@@ -80,6 +80,7 @@ public class ListFrame extends JFrame {
         JLabel l2 = new JLabel("합계");
         t2 = new JTextField("0엔");
         t2.setEditable(false);
+        table.setDragEnabled(false);
         p2.add(b1);
         p2.add(b2);
         p2.add(l2);
@@ -90,30 +91,35 @@ public class ListFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
-				new LoginMainFrame(LoginFrame.userName);
-				
+				dispose();				
 			}
 		});
         b2.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new ModifyFrame();
-				
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = table.getSelectedRow();
+                String date = model.getValueAt(selectedRow, 0).toString();
+                String dStation = model.getValueAt(selectedRow, 1).toString();
+                String aStation = model.getValueAt(selectedRow, 2).toString();
+                String pare = model.getValueAt(selectedRow, 3).toString();
+                String numberOfTime = model.getValueAt(selectedRow, 4).toString();
+                String finalPare = model.getValueAt(selectedRow, 5).toString();
 
-        TableData();
+                // 클릭한 행의 정보를 ModifyFrame에 String 형태로 반환
+                new ModifyFrame(date, dStation, aStation, pare, numberOfTime, finalPare, currentDate);
+            }
+        });
+        tabelData();   
+        
     }
 
     void date() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
         l1.setText(currentDate.format(formatter));
-        TableData();
+        tabelData();
     }
 
-    void TableData() {
+    void tabelData() {
         DataUtil du = new DataUtil();
         String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
         String[][] userInfoArr = du.loadUserTransInfo(formattedDate, LoginFrame.userId);

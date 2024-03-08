@@ -142,7 +142,7 @@ public class SignUpFrame extends JFrame {
 	void saveUserInfo() {
 		
 
-		String path = "C:\\Users\\msi\\Desktop\\wevars study\\workspace\\swing\\src\\swing\\userinfo.txt";
+		String path = "src\\swing\\userinfo.txt";
 
 		try {
 			// FileWriter를 사용하여 파일 생성 또는 열기 (두 번째 매개변수는 append 여부)

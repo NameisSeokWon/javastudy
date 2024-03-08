@@ -10,12 +10,12 @@ import koutsuhi.entity.UserInfoEntity;
 
 public class DataUtil {
 
-	String userInfoPath ="C:\\Users\\msi\\Desktop\\wevars study\\workspace\\swing\\src\\swing\\userinfo.txt";
-
+	String userInfoPath = "src\\swing\\userinfo.txt";
+	// 절대경로 말고 상대경로로 고치기 \\\src부터 시작
 
 	public String[][] loadUserTransInfo(String date, String userId){
 
-		String transInfoPath = "C:\\Users\\msi\\Desktop\\wevars study\\workspace\\swing\\src\\koutsuhi\\data\\" + date + "\\" + date + "_" + userId + ".txt";
+		String transInfoPath = "src\\koutsuhi\\data\\" + date + "\\" + date + "_" + userId + ".txt";
 		String[][] transInfoArr = new String[0][];
 		int count = 0;
 
