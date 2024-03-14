@@ -37,7 +37,6 @@ public class TestFrame1 extends JFrame {
 		JLabel l1 = new JLabel("원의 반지름");
 		JLabel l2 = new JLabel("원의 넓이");
 
-
 		p1.add(l1);
 		p1.add(t1);
 		p2.add(l2);
@@ -94,6 +93,7 @@ public class TestFrame1 extends JFrame {
 				t1.setText("");
 			}
 		});
+		
 
 		panel.add(b1);
 		panel.add(cb);

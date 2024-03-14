@@ -5,11 +5,16 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,9 +24,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import koutsuhi.list.ListFrame;
+import koutsuhi.login.LoginFrame;
+
 public class LoginMainFrame extends JFrame {
-	SimpleDateFormat sdf;
-	String today;
+
+	String date;
+	String userName;
+
+	JTextField t1 = new JTextField(10);
 	JTextField t2 = new JTextField(10);
 	JTextField t3 = new JTextField(10);
 	JTextField t4 = new JTextField(10);
@@ -29,8 +40,9 @@ public class LoginMainFrame extends JFrame {
 	JTextArea c2;
 
 	public LoginMainFrame(String userName) {
+		this.userName = userName;
 		setTitle("로그인 메인화면");
-		setSize(350,400);
+		setSize(450,500);
 		setLayout(new BorderLayout(10,10));
 		showCenter();
 		showButton();
@@ -38,57 +50,50 @@ public class LoginMainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel panel1 = new JPanel();
-		JLabel label = new JLabel("환영합니다." + userName + " 님");
+		JLabel label = new JLabel("환영합니다. " + userName + " 님");
 		panel1.add(label);
 		add(panel1, BorderLayout.NORTH);
-
-
 
 		setVisible(true);
 	}
 	void showCenter() {
 		JPanel panel2 = new JPanel(new GridLayout(6,2));
-		JLabel l1 = new JLabel("오늘 날짜");
-		sdf = new SimpleDateFormat("yyyy-MM-dd");
-		today = sdf.format(new Date());
-		JTextArea c1 = new JTextArea(today,1,10);
-		c1.setEditable(false);
-
+		JLabel l1 = new JLabel("날짜");
 		JLabel l2 = new JLabel("출발지");
 		JLabel l3 = new JLabel("도착지");
 		JLabel l4 = new JLabel("금액");
-		JLabel l5 = new JLabel("출근일수");
+		JLabel l5 = new JLabel("횟수");
 		JLabel l6 = new JLabel("교통비");
-		c2 = new JTextArea("",1,10);
 
+		c2 = new JTextArea("",1,10);
 		c2.setEditable(false);
 
-		panel2.add(l1);	panel2.add(c1);
+
+
+		panel2.add(l1);	panel2.add(t1);
 		panel2.add(l2);	panel2.add(t2);
 		panel2.add(l3);	panel2.add(t3);
 		panel2.add(l4);	panel2.add(t4);
 		panel2.add(l5);	panel2.add(t5);
 		panel2.add(l6);	panel2.add(c2);
 
-
 		add(panel2, BorderLayout.CENTER);
 	}
 	void showButton() {
 
 		JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.CENTER,10,10));
-		JButton b1 = new JButton("정산");
+		JButton b1 = new JButton("계산");
 		JButton b2 = new JButton("저장");
 		JButton b3 = new JButton("새로고침");
+		JButton b4 = new JButton("조회하기");
 
 		b1.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(t4.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "금액을 입력하세요.");
-
-				} else if(t5.getText().isEmpty() ) {
-					JOptionPane.showMessageDialog(null, "출근일수를 입력하세요.");
+				} else if(t5.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "횟수를 입력하세요.");
 				} else {
 					String inputPrice = t4.getText();
 					int price = Integer.parseInt(inputPrice);
@@ -99,20 +104,27 @@ public class LoginMainFrame extends JFrame {
 
 					c2.setText(String.valueOf(sum));
 				}
-
 			}
 		});
 		b2.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				saveDataToFile();
+				try {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					LocalDate localDate = LocalDate.parse(t1.getText(), formatter);
+					date = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+
+
+					saveDataToFile();
+				} catch (IOException ioException) {
+					ioException.printStackTrace();
+				}
 			}
 		});
 		b3.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				t1.setText("");
 				t2.setText("");
 				t3.setText("");
 				t4.setText("");
@@ -121,25 +133,121 @@ public class LoginMainFrame extends JFrame {
 			}
 		});
 
+
+		b4.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ListFrame();
+			}
+		});
+
+
 		panel3.add(b1);
 		panel3.add(b2);
+		panel3.add(b4);
 		panel3.add(b3);
 		add(panel3, BorderLayout.SOUTH);
 	}
-	void saveDataToFile() {
-		String filename = "C:\\Users\\msi\\Desktop\\wevars study\\workspace\\swing\\src\\koutsuhi\\202402" + t2.getText() + "_" + today + ".txt";
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-			writer.write(t2.getText() + ",");
-			writer.write(t3.getText() + ",");
-			writer.write(t4.getText() + ",");
-			writer.write(t5.getText() + ",");
-			writer.write(c2.getText() + "\n");
-			JOptionPane.showMessageDialog(null, "데이터가 성공적으로 저장되었습니다.");
-	        } catch (IOException e) {
-	            JOptionPane.showMessageDialog(null, "파일 저장 중 오류가 발생했습니다.");
-	            e.printStackTrace();
+	void saveDataToFile() throws IOException {
+		String folderPath = "src\\koutsuhi\\data\\" + date + "\\";
+		File folder = new File(folderPath);
+		folder.mkdir();
+	    String filename = folderPath + date + "_" + LoginFrame.userId + ".csv";
+	    String newData = getCurrentData();
+
+	    if (fileExists(filename) && fileContainsData(filename, newData)) {
+	        int option = JOptionPane.showConfirmDialog(null, "이미 저장된 동일한 데이터가 있습니다. 덮어쓰시겠습니까?", "데이터 저장", JOptionPane.YES_NO_OPTION);
+	        if (option == JOptionPane.YES_OPTION) {
+	            saveToFile(filename, newData);
 	        }
+	    } else {
+	        saveToFile(filename, newData);
+	    }
 	}
+	boolean fileExists(String filename) {
+	    File file = new File(filename);
+	    return file.exists();
+	}
+
+	void saveToFile(String filename, String data) throws IOException {
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+	    	writer.write(data);
+	    	if (fileExists(filename)) {
+	    		writer.newLine();
+	    	}
+	        JOptionPane.showMessageDialog(null, "데이터가 성공적으로 저장되었습니다.");
+	    }
+	}
+	boolean fileContainsData(String filename, String data) throws IOException {
+	    try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+	        String line;
+	        while ((line = reader.readLine()) != null) {
+	            if (line.equals(data)) {
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
+	}
+
+
+    String getCurrentData() {
+        return t1.getText() + "," +
+        		t2.getText() + "," +
+        		t3.getText() + "," +
+        		t4.getText() + "," +
+        		t5.getText() + "," +
+        		c2.getText();
+    }
+/*    public boolean checkInputData() {
+	// yyyy-MM-dd
+	String regex = "^\\d{4}-(0?[1-9]|1[0-2])-(0?[1-9]|[1-2][0-9]|3[0-1])$";
+
+    // 정규식 패턴을 컴파일
+    Pattern pattern = Pattern.compile(regex);
+
+    // 입력된 날짜를 체크한다.
+    Matcher matcher = pattern.matcher(t1.getText());
+
+    // 일치 여부 반환
+    if(!matcher.matches()) {
+		JOptionPane.showMessageDialog(null, "날짜는 yyyy-mm-dd 형식으로 입력해주세요.");
+		return false;
+    	}
+	String regex1 = "^[가-힣]+$";
+	pattern = Pattern.compile(regex1);
+	matcher = pattern.matcher(t2.getText());
+    // 일치 여부 반환
+    if(!matcher.matches()) {
+		JOptionPane.showMessageDialog(null, "출발역은 한글로만 입력가능합니다.");
+		return false;
+    	}
+	matcher = pattern.matcher(t3.getText());
+    // 일치 여부 반환
+    if(!matcher.matches()) {
+		JOptionPane.showMessageDialog(null, "도착역은 한글로만 입력가능합니다.");
+		return false;
+    	}
+	String regex2 = "^[1-9]\\d*$";
+	pattern = Pattern.compile(regex2);
+	matcher = pattern.matcher(t4.getText());
+
+    // 일치 여부 반환
+    if(!matcher.matches()) {
+		JOptionPane.showMessageDialog(null, "금액은 정수로만 입력 가능합니다.");
+		return false;
+    	}
+    String regex3 = "^[1-9]\\d*$";
+    pattern = Pattern.compile(regex3);
+    matcher = pattern.matcher(t5.getText());
+    // 일치 여부 반환
+    if(!matcher.matches()) {
+    	JOptionPane.showMessageDialog(null, "횟수는 정수로만 입력 가능합니다.");
+    	return false;
+    	}
+    return true;
+
+    }
+*/
+
 }
-
-

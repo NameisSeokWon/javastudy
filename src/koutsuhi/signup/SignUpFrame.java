@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 
 import koutsuhi.login.LoginFrame;
 
+
 public class SignUpFrame extends JFrame {
 
 	JTextField t1 = new JTextField(10);
@@ -27,6 +28,8 @@ public class SignUpFrame extends JFrame {
 	JRadioButton r2 = new JRadioButton("여");
 
 	boolean inputErrorFlag = false;
+
+
 
 	public SignUpFrame() {
 		setTitle("교통비정산 시스템 - 회원가입");
@@ -64,6 +67,7 @@ public class SignUpFrame extends JFrame {
 
 				if(!inputErrorFlag) {
 					saveUserInfo();
+
 				}
 
 			}
@@ -137,7 +141,8 @@ public class SignUpFrame extends JFrame {
 
 	void saveUserInfo() {
 
-		String path = "C:\\Users\\msi\\Desktop\\wevars study\\workspace\\swing\\src\\swing\\userinfo.txt";
+
+		String path = "src\\swing\\userinfo.csv";
 
 		try {
 			// FileWriter를 사용하여 파일 생성 또는 열기 (두 번째 매개변수는 append 여부)
@@ -172,12 +177,9 @@ public class SignUpFrame extends JFrame {
 		}catch (Exception e) {
 			System.out.println("파일 생성 중 오류가 발생했습니다.");
             e.printStackTrace();
+
 		}
 
-
 	}
-
-
-
 
 }

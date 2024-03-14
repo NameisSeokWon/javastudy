@@ -18,9 +18,10 @@ import koutsuhi.entity.UserInfoEntity;
 import koutsuhi.loginmain.LoginMainFrame;
 import koutsuhi.signup.SignUpFrame;
 
-public class LoginFrame extends JFrame {	
-	
+public class LoginFrame extends JFrame {
+
 	public static String userId;
+	public static String userName;
 
 	JButton b1 = new JButton("로그인");
 	JButton b2 = new JButton("회원가입");
@@ -28,10 +29,12 @@ public class LoginFrame extends JFrame {
 	JPasswordField t2 = new JPasswordField(10);
 	boolean loginSuccessFlag = false;
 
+
 	public LoginFrame() {
 		setTitle("교통비정산 시스템 - 로그인");
 		setSize(300,200);
 		setLocationRelativeTo(null);
+
 
 		setLayout(new GridLayout(2,1));
 
@@ -76,7 +79,7 @@ public class LoginFrame extends JFrame {
 		add(panel2);
 
 		setVisible(true);
-		
+
 	}
 
 	public static void main(String[] args) {
@@ -89,11 +92,11 @@ public class LoginFrame extends JFrame {
 
 		String pw = String.valueOf(t2.getPassword());
 		loginSuccessFlag = false;
-		String userName = "";
-
+//		String userName = "";
 		for(UserInfoEntity userInfo: userInfoList) {
 			if(userInfo.getId().equals(t1.getText()) && userInfo.getPw().equals(pw)) {
 				userId = userInfo.getId();
+				userName = userInfo.getName();
 				loginSuccessFlag = true;
 				break;
 			}
@@ -105,7 +108,6 @@ public class LoginFrame extends JFrame {
 			new LoginMainFrame(userName);
 		} else {
 			JOptionPane.showMessageDialog(null, "아이디 패스워드가 존재하지 않습니다.");
-		}		
+		}
 	}
-
 }

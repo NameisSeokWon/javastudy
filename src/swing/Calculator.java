@@ -24,6 +24,7 @@ public class Calculator extends JFrame {
 			add(panel, BorderLayout.NORTH);
 		}
 		void showCalculation() {
+			
 
 			JPanel panel = new JPanel();
 			JPanel p1 = new JPanel(new FlowLayout(FlowLayout.CENTER,10,10));
