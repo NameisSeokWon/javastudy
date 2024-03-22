@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="" method="">
+    <label for="bank">보낼 은행 :</label>
+    <select id = "bank" name="bank">
+        <option value="">----은행을 선택해주세요----</option>
+        <option value="1">미즈호</option>
+        <option value="2">UFJ은행</option>
+    </select>
+    <br>
+    <label for="branch">지점코드 :</label>
+    <input type="number" id="branch" name="branch">
+    <br>
+    <label for="account">계좌번호 :</label>
+    <input type="number" id="account" name="account">
+    <br>
+    <label for="amount">보낼 금액 :</label>
+    <input type="number" id="amount" name="amount" >
+    <br>
+    <button type="submit">송금하기</button>
+    <a href="/">뒤로가기</a>
+</form>
+</body>
+</html>
